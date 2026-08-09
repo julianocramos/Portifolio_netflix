@@ -1,0 +1,1 @@
+web: gunicorn devflix.wsgi --log-file -

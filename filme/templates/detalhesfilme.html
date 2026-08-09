@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+{{ object.titulo }} | DevFlix
+{% endblock %}
+
+{% block head %}
+<style>
+    .detail-hero {
+        position: relative;
+        min-height: 480px;
+        max-height: 620px;
+        overflow: hidden;
+        background: #030712;
+    }
+
+    .detail-hero img {
+        width: 100%;
+        height: 100%;
+        min-height: 480px;
+        max-height: 620px;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
+
+    .detail-overlay {
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(
+                to right,
+                rgba(0, 0, 0, 0.92) 0%,
+                rgba(0, 0, 0, 0.60) 45%,
+                rgba(0, 0, 0, 0.15) 100%
+            ),
+            linear-gradient(
+                to top,
+                #030712 0%,
+                transparent 45%
+            );
+    }
+
+    .video-wrapper {
+        width: 100%;
+        max-width: 960px;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-radius: 14px;
+        background: #000;
+    }
+
+    .video-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .related-card {
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-radius: 12px;
+        background: #111827;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .related-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .related-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<main class="min-h-screen bg-gray-950 text-white">
+
+    <!-- Hero -->
+    <section class="detail-hero">
+
+        <img
+            src="{{ object.thumb.url }}"
+            alt="{{ object.titulo }}"
+        >
+
+        <div class="detail-overlay"></div>
+
+        <div class="absolute inset-0 z-10 flex items-end">
+            <div class="w-full px-6 pb-12 md:px-12 lg:px-20">
+
+                <span class="inline-block rounded-full bg-red-600 px-3 py-1 text-sm font-semibold">
+                    {{ object.get_categoria_display }}
+                </span>
+
+                <h1 class="mt-4 max-w-4xl text-4xl font-bold md:text-5xl">
+                    {{ object.titulo }}
+                </h1>
+
+                <p class="mt-4 max-w-2xl text-gray-200">
+                    {{ object.descricao }}
+                </p>
+
+                {% if object.episodios.first %}
+                <div class="mt-6">
+                    <a
+                        href="#episodios"
+                        class="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-black transition hover:bg-gray-200"
+                    >
+                        <ion-icon name="play"></ion-icon>
+                        Assistir
+                    </a>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </section>
+
+
+    <div class="space-y-14 px-6 py-12 md:px-12 lg:px-20">
+
+        <!-- Informações -->
+        <section>
+
+            <h2 class="text-2xl font-bold">
+                Sobre este conteúdo
+            </h2>
+
+            <p class="mt-4 max-w-4xl leading-relaxed text-gray-300">
+                {{ object.descricao }}
+            </p>
+
+            <p class="mt-4 text-sm text-gray-500">
+                Visualizações: {{ object.visualizacoes }}
+            </p>
+
+        </section>
+
+
+        <!-- Episódios -->
+        <section id="episodios">
+
+            <div class="mb-6">
+                <p class="text-sm font-semibold uppercase tracking-widest text-red-500">
+                    Player
+                </p>
+
+                <h2 class="mt-1 text-2xl font-bold md:text-3xl">
+                    Episódios
+                </h2>
+            </div>
+
+            <div class="space-y-10">
+
+                {% for episodio in object.episodios.all %}
+
+                <article class="rounded-xl border border-gray-800 bg-gray-900 p-5">
+
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold uppercase tracking-wider text-red-500">
+                            Episódio {{ forloop.counter }}
+                        </p>
+
+                        <h3 class="mt-1 text-xl font-semibold">
+                            {{ episodio.titulo }}
+                        </h3>
+                    </div>
+
+                    <div class="video-wrapper">
+
+                        <iframe
+                            src="{{ episodio.video }}"
+                            title="{{ episodio.titulo }}"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                            referrerpolicy="strict-origin-when-cross-origin">
+                        </iframe>
+
+                    </div>
+
+                    <div class="mt-4">
+                        <a
+                            href="{{ episodio.video }}"
+                            target="_blank"
+                            class="inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-white"
+                        >
+                            <ion-icon name="open-outline"></ion-icon>
+                            Abrir vídeo em nova aba
+                        </a>
+                    </div>
+
+                </article>
+
+                {% empty %}
+
+                <div class="rounded-xl border border-gray-800 bg-gray-900 p-8">
+                    <p class="text-gray-400">
+                        Nenhum episódio disponível.
+                    </p>
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+        <!-- Relacionados -->
+        <section>
+
+            <div class="mb-6">
+                <p class="text-sm font-semibold uppercase tracking-widest text-red-500">
+                    Explore
+                </p>
+
+                <h2 class="mt-1 text-2xl font-bold md:text-3xl">
+                    Conteúdos relacionados
+                </h2>
+            </div>
+
+            <div class="related-grid">
+
+                {% for filme in filmes_relacionados %}
+
+                <a
+                    href="{% url 'filme:detalhesfilme' filme.pk %}"
+                    class="related-card"
+                >
+                    <img
+                        src="{{ filme.thumb.url }}"
+                        alt="{{ filme.titulo }}"
+                        loading="lazy"
+                    >
+                </a>
+
+                {% empty %}
+
+                <p class="text-gray-400">
+                    Nenhum conteúdo relacionado.
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}
