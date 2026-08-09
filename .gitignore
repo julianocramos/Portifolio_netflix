@@ -159,3 +159,6 @@ cython_debug/
 #.idea/
 
 planejamento.txt
+db.sqlite3
+.idea/
+staticfiles/
