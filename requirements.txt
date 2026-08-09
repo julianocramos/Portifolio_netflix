@@ -4,3 +4,4 @@ crispy-bootstrap5
 Pillow
 whitenoise
 dj-database-url
+psycopg[binary]
