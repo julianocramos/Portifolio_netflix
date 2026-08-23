@@ -162,3 +162,4 @@ planejamento.txt
 db.sqlite3
 .idea/
 staticfiles/
+*.sqlite3
