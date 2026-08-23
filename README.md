@@ -1,268 +1,228 @@
-\# 🎬 DevFlix
+# 🎬 DevFlix
 
+A Netflix-inspired streaming platform built with **Python and Django**, modernized as a portfolio project to demonstrate backend development, authentication, database integration, responsive UI design, and cloud deployment.
 
+> Originally developed during my Python/Django studies and revisited in 2026 with an updated architecture, current dependencies, improved security, an English recruiter-facing interface, and a production deployment on Vercel.
 
-DevFlix is a Netflix-inspired web application developed with Django.
+## 🌐 Live Demo
 
+**[Open DevFlix](https://portifolio-netflix.vercel.app/)**
 
+### Demo Access
 
-The project was originally created as part of my Python/Django studies and has since been modernized and updated to work with current technologies.
-
-
-
-The application simulates a streaming platform focused on programming and technology content.
-
-
-
-\## 🚀 Features
-
-
-
-\- User authentication
-
-\- User profile management
-
-\- Content catalogue
-
-\- Featured content section
-
-\- Recently added content
-
-\- Popular content
-
-\- Continue watching section
-
-\- Content search
-
-\- Content detail pages
-
-\- YouTube video integration
-
-\- View tracking
-
-\- Responsive Netflix-inspired interface
-
-
-
-\## 🛠️ Technologies
-
-
-
-\- Python
-
-\- Django 5.2
-
-\- HTML5
-
-\- CSS
-
-\- Tailwind CSS
-
-\- SQLite
-
-\- WhiteNoise
-
-\- Cloudinary
-
-\- YouTube Embed
-
-
-
-\## 📂 Project Structure
-
-
+Recruiters and visitors can explore the application with the public demo account:
 
 ```text
+Username: demo@devflix.app
+Password: DevFlixDemo2026!
+```
 
-Portifolio\_netflix/
+You can also click **Use Demo Account** on the login page to fill the credentials automatically.
 
+The demo account is intentionally restricted: it has no staff or administrator privileges, and profile/password changes are disabled for that account.
+
+> The catalogue contains educational technology videos from the original version of the project. Some video titles and audio are in Portuguese, while the application interface is in English.
+
+## ✨ Key Features
+
+- User authentication and session management
+- Public recruiter demo account
+- Automatic demo-account provisioning in production
+- Show / hide password control
+- User profile management for regular accounts
+- Responsive streaming-style catalogue
+- Featured content hero section
+- Recently added content
+- Trending content based on views
+- Continue Watching history
+- Content search
+- Detailed content pages
+- Category-based related content
+- Embedded YouTube video player
+- View tracking
+- Secure logout flow
+- Responsive Netflix-inspired interface
+
+## 🛠️ Tech Stack
+
+| Area | Technologies |
+| --- | --- |
+| Backend | Python, Django 5.2 |
+| Database | PostgreSQL in production, SQLite locally |
+| ORM | Django ORM |
+| Frontend | Django Templates, HTML5, CSS, Tailwind CSS, Bootstrap 5 |
+| Forms | django-crispy-forms, crispy-bootstrap5 |
+| Static Files | WhiteNoise |
+| Images | Pillow |
+| Database Configuration | dj-database-url |
+| PostgreSQL Driver | psycopg |
+| Deployment | Vercel |
+| Video | YouTube Embed |
+
+## 🏗️ Application Architecture
+
+```text
+Browser
+   │
+   ▼
+Django Templates / Views
+   │
+   ├── Authentication
+   ├── Catalogue & Search
+   ├── User Profiles
+   ├── View History
+   └── Video Detail Pages
+   │
+   ▼
+Django ORM
+   │
+   ├── SQLite       → Local development
+   └── PostgreSQL   → Production
+```
+
+The application automatically switches database backends based on the `DATABASE_URL` environment variable. SQLite is used for local development, while production uses PostgreSQL.
+
+## 📂 Project Structure
+
+```text
+Portifolio_netflix/
 │
-
 ├── devflix/          # Django project configuration
-
-├── filme/            # Main application
-
-├── static/           # Static files and images
-
+├── filme/            # Main Django application
+├── static/           # Static assets
 ├── templates/        # Global templates
-
-├── media/            # Media files
-
+├── media/            # Catalogue images
 ├── manage.py
-
-└── requirements.txt
-
+├── requirements.txt
+└── runtime.txt
 ```
 
+## 💻 Running Locally
 
-
-\## 💻 Running Locally
-
-
-
-Clone the repository:
-
-
+### 1. Clone the repository
 
 ```bash
-
-git clone https://github.com/julianocramos/Portifolio\_netflix.git
-
+git clone https://github.com/julianocramos/Portifolio_netflix.git
+cd Portifolio_netflix
 ```
 
-
-
-Enter the project directory:
-
-
+### 2. Create a virtual environment
 
 ```bash
-
-cd Portifolio\_netflix
-
-```
-
-
-
-Create a virtual environment:
-
-
-
-```bash
-
 python -m venv .venv
-
 ```
 
+On Windows:
 
-
-Activate the virtual environment on Windows:
-
-
-
-```bash
-
-.venv\\Scripts\\activate
-
+```powershell
+.venv\Scripts\activate
 ```
 
-
-
-Install the dependencies:
-
-
+On macOS/Linux:
 
 ```bash
+source .venv/bin/activate
+```
 
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
-
 ```
 
-
-
-Run the migrations:
-
-
+### 4. Apply migrations
 
 ```bash
-
 python manage.py migrate
-
 ```
 
-
-
-Start the development server:
-
-
+### 5. Start the development server
 
 ```bash
-
 python manage.py runserver
-
 ```
 
-
-
-Then access the application at:
-
-
+Open:
 
 ```text
-
 http://127.0.0.1:8000/
-
 ```
 
+The application will use a local SQLite database when `DATABASE_URL` is not defined.
 
+## 🔐 Environment Variables
 
-\## 🔐 Environment Variables
+Sensitive production credentials are not stored in the repository.
 
-
-
-Sensitive credentials are not stored in the repository.
-
-
-
-Production credentials and secrets should be configured using environment variables.
-
-
-
-Example:
-
-
+The main production variables are:
 
 ```env
-
-DJANGO\_SECRET\_KEY=your-secret-key
-
+DJANGO_SECRET_KEY=your-secret-key
+DATABASE_URL=your-postgresql-connection-string
 ```
 
+The Vercel deployment provides its own runtime variables such as `VERCEL` and `VERCEL_URL`.
 
+Local environment files, Vercel project metadata, and SQLite databases are excluded from version control.
 
-\## 🌐 Deployment
+## 🚀 Deployment
 
+DevFlix is deployed on **Vercel** from the `main` branch.
 
+Production URL:
 
-The original version of DevFlix was deployed on Heroku.
+**https://portifolio-netflix.vercel.app/**
 
+The production configuration includes:
 
+- PostgreSQL through `DATABASE_URL`
+- secure session and CSRF cookies over HTTPS
+- proxy-aware HTTPS configuration
+- WhiteNoise for static assets
+- environment-based secret management
+- automatic demo-account availability
 
-The project is currently being modernized for a new deployment environment.
+## 🔄 Modernization Work
 
+The original application was developed in 2022. In 2026, I revisited the project and modernized it as a portfolio application.
 
+Key improvements include:
 
-A new production URL will be added here after deployment.
+- upgraded to Django 5.2
+- updated Python dependencies
+- migrated production database configuration to PostgreSQL-compatible environment variables
+- added Vercel deployment support
+- redesigned login and catalogue interfaces
+- converted the recruiter-facing UI to English
+- added a dedicated public demo experience
+- improved authentication and logout handling
+- protected the demo account from profile and password modifications
+- added production security settings
+- improved responsive catalogue and content-detail layouts
+- removed legacy project branding from the public interface
 
+## 🎯 What This Project Demonstrates
 
+DevFlix demonstrates practical experience with:
 
-\## 📌 Project Background
+- Django application architecture
+- authentication and authorization
+- relational data modelling
+- ORM-based database access
+- environment-specific configuration
+- PostgreSQL and SQLite
+- server-rendered interfaces
+- reusable templates
+- production deployment
+- security-conscious configuration
+- maintaining and modernizing an existing codebase
 
+## 👨‍💻 Author
 
+**Juliano Ramos**
 
-This project was originally developed in 2022 as part of my studies in Python and Django.
+GitHub: [@julianocramos](https://github.com/julianocramos)
 
+---
 
-
-In 2026, the application was revisited and modernized, including dependency updates, security improvements, interface enhancements and compatibility with newer versions of Django and Python.
-
-
-
-\## 👨‍💻 Author
-
-
-
-\*\*Juliano Ramos\*\*
-
-
-
-GitHub: @julianocramos
-
-
-
-\---
-
-
-
-⭐ This repository is part of my software development and data technology portfolio.
-
+⭐ Part of my software development, data, and technology portfolio.
