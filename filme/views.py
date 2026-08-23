@@ -1,31 +1,8 @@
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import reverse
 from .models import Filme, Usuario
-from .forms import CriarContaForm, FormHomepage
-from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView
+from .forms import CriarContaForm
+from django.views.generic import ListView, DetailView, FormView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-
-# Create your views here.
-# Class base view
-
-
-class Homepage(FormView):
-    template_name = 'homepage.html'
-    form_class = FormHomepage
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('filme:homefilmes')
-        else:
-            return super().get(self, request, *args, **kwargs)
-
-    def get_success_url(self):
-        email = self.request.POST.get('email')
-        usuarios = Usuario.objects.filter(email=email)
-        if usuarios:
-            return reverse('filme:login')
-        else:
-            return reverse('filme:criarconta')
 
 
 class Homefilmes(LoginRequiredMixin, ListView):
@@ -41,13 +18,19 @@ class Detalhesfilme(LoginRequiredMixin, DetailView):
         filme = self.get_object()
         filme.visualizacoes += 1
         filme.save()
+
         usuario = request.user
         usuario.filmes_vistos.add(filme)
+
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(Detalhesfilme, self).get_context_data(**kwargs)
-        filmes_relacionados = Filme.objects.filter(categoria=self.get_object().categoria)[:3]
+
+        filmes_relacionados = Filme.objects.filter(
+            categoria=self.get_object().categoria
+        )[:3]
+
         context['filmes_relacionados'] = filmes_relacionados
         return context
 
@@ -58,11 +41,13 @@ class Pesquisafilme(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         termo_pesquisa = self.request.GET.get('query')
+
         if termo_pesquisa:
-            object_list = self.model.objects.filter(titulo__icontains=termo_pesquisa)
-            return object_list
-        else:
-            return None
+            return self.model.objects.filter(
+                titulo__icontains=termo_pesquisa
+            )
+
+        return self.model.objects.none()
 
 
 class Paginaperfil(LoginRequiredMixin, UpdateView):
@@ -84,15 +69,3 @@ class Criarconta(FormView):
 
     def get_success_url(self):
         return reverse('filme:login')
-
-
-# Function base view
-# def homepage(request):
-#    return render(request, 'homepage.html')
-
-
-# def homefilmes(request):
-#     context = {}
-#     lista_filmes = Filme.objects.all()
-#     context['lista_filmes'] = lista_filmes
-#     return render(request, 'homefilmes.html', context)

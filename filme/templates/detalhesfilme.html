@@ -64,6 +64,7 @@
     }
 
     .related-card {
+        position: relative;
         aspect-ratio: 16 / 9;
         overflow: hidden;
         border-radius: 12px;
@@ -81,6 +82,25 @@
         height: 100%;
         object-fit: cover;
         display: block;
+    }
+
+    .related-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: flex-end;
+        padding: 1rem;
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.9),
+            transparent 65%
+        );
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    .related-card:hover .related-overlay {
+        opacity: 1;
     }
 </style>
 {% endblock %}
@@ -100,10 +120,23 @@
         <div class="detail-overlay"></div>
 
         <div class="absolute inset-0 z-10 flex items-end">
+
             <div class="w-full px-6 pb-12 md:px-12 lg:px-20">
 
                 <span class="inline-block rounded-full bg-red-600 px-3 py-1 text-sm font-semibold">
-                    {{ object.get_categoria_display }}
+
+                    {% if object.categoria == 'ANALISE' %}
+                        Analysis
+                    {% elif object.categoria == 'PROGRAMACAO' %}
+                        Programming
+                    {% elif object.categoria == 'APRESENTACAO' %}
+                        Presentation
+                    {% elif object.categoria == 'OUTROS' %}
+                        Other
+                    {% else %}
+                        {{ object.categoria }}
+                    {% endif %}
+
                 </span>
 
                 <h1 class="mt-4 max-w-4xl text-4xl font-bold md:text-5xl">
@@ -115,18 +148,23 @@
                 </p>
 
                 {% if object.episodios.first %}
+
                 <div class="mt-6">
+
                     <a
-                        href="#episodios"
-                        class="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-black transition hover:bg-gray-200"
+                        href="#episodes"
+                        class="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-black no-underline transition hover:bg-gray-200"
                     >
                         <ion-icon name="play"></ion-icon>
-                        Assistir
+                        Watch Now
                     </a>
+
                 </div>
+
                 {% endif %}
 
             </div>
+
         </div>
 
     </section>
@@ -134,35 +172,61 @@
 
     <div class="space-y-14 px-6 py-12 md:px-12 lg:px-20">
 
-        <!-- Informações -->
+        <!-- About -->
         <section>
 
-            <h2 class="text-2xl font-bold">
-                Sobre este conteúdo
+            <p class="text-sm font-semibold uppercase tracking-widest text-red-500">
+                Overview
+            </p>
+
+            <h2 class="mt-1 text-2xl font-bold md:text-3xl">
+                About this content
             </h2>
 
             <p class="mt-4 max-w-4xl leading-relaxed text-gray-300">
                 {{ object.descricao }}
             </p>
 
-            <p class="mt-4 text-sm text-gray-500">
-                Visualizações: {{ object.visualizacoes }}
-            </p>
+            <div class="mt-5 flex flex-wrap gap-3 text-sm text-gray-400">
+
+                <span class="rounded-full border border-gray-700 px-3 py-1">
+                    {{ object.visualizacoes }} view{{ object.visualizacoes|pluralize }}
+                </span>
+
+                <span class="rounded-full border border-gray-700 px-3 py-1">
+
+                    {% if object.categoria == 'ANALISE' %}
+                        Analysis
+                    {% elif object.categoria == 'PROGRAMACAO' %}
+                        Programming
+                    {% elif object.categoria == 'APRESENTACAO' %}
+                        Presentation
+                    {% elif object.categoria == 'OUTROS' %}
+                        Other
+                    {% else %}
+                        {{ object.categoria }}
+                    {% endif %}
+
+                </span>
+
+            </div>
 
         </section>
 
 
-        <!-- Episódios -->
-        <section id="episodios">
+        <!-- Episodes -->
+        <section id="episodes">
 
             <div class="mb-6">
+
                 <p class="text-sm font-semibold uppercase tracking-widest text-red-500">
                     Player
                 </p>
 
                 <h2 class="mt-1 text-2xl font-bold md:text-3xl">
-                    Episódios
+                    Episodes
                 </h2>
+
             </div>
 
             <div class="space-y-10">
@@ -172,13 +236,15 @@
                 <article class="rounded-xl border border-gray-800 bg-gray-900 p-5">
 
                     <div class="mb-4">
+
                         <p class="text-sm font-semibold uppercase tracking-wider text-red-500">
-                            Episódio {{ forloop.counter }}
+                            Episode {{ forloop.counter }}
                         </p>
 
                         <h3 class="mt-1 text-xl font-semibold">
                             {{ episodio.titulo }}
                         </h3>
+
                     </div>
 
                     <div class="video-wrapper">
@@ -194,14 +260,17 @@
                     </div>
 
                     <div class="mt-4">
+
                         <a
                             href="{{ episodio.video }}"
                             target="_blank"
-                            class="inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-white"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center gap-2 text-sm text-gray-400 no-underline transition hover:text-white"
                         >
                             <ion-icon name="open-outline"></ion-icon>
-                            Abrir vídeo em nova aba
+                            Open video in a new tab
                         </a>
+
                     </div>
 
                 </article>
@@ -209,9 +278,11 @@
                 {% empty %}
 
                 <div class="rounded-xl border border-gray-800 bg-gray-900 p-8">
+
                     <p class="text-gray-400">
-                        Nenhum episódio disponível.
+                        No episodes are currently available.
                     </p>
+
                 </div>
 
                 {% endfor %}
@@ -221,17 +292,19 @@
         </section>
 
 
-        <!-- Relacionados -->
+        <!-- Related Content -->
         <section>
 
             <div class="mb-6">
+
                 <p class="text-sm font-semibold uppercase tracking-widest text-red-500">
                     Explore
                 </p>
 
                 <h2 class="mt-1 text-2xl font-bold md:text-3xl">
-                    Conteúdos relacionados
+                    Related Content
                 </h2>
+
             </div>
 
             <div class="related-grid">
@@ -242,22 +315,54 @@
                     href="{% url 'filme:detalhesfilme' filme.pk %}"
                     class="related-card"
                 >
+
                     <img
                         src="{{ filme.thumb.url }}"
                         alt="{{ filme.titulo }}"
                         loading="lazy"
                     >
+
+                    <div class="related-overlay">
+
+                        <div>
+
+                            <h3 class="font-semibold text-white">
+                                {{ filme.titulo }}
+                            </h3>
+
+                            <p class="mt-1 text-sm text-gray-300">
+                                View details
+                            </p>
+
+                        </div>
+
+                    </div>
+
                 </a>
 
                 {% empty %}
 
                 <p class="text-gray-400">
-                    Nenhum conteúdo relacionado.
+                    No related content is currently available.
                 </p>
 
                 {% endfor %}
 
             </div>
+
+        </section>
+
+
+        <!-- Back -->
+        <section class="border-t border-gray-800 pt-8">
+
+            <a
+                href="{% url 'filme:homefilmes' %}"
+                class="inline-flex items-center gap-2 text-gray-400 no-underline transition hover:text-white"
+            >
+                <ion-icon name="arrow-back-outline"></ion-icon>
+                Back to Browse
+            </a>
 
         </section>
 

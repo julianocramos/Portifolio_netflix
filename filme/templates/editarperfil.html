@@ -3,33 +3,153 @@
 {% load crispy_forms_tags %}
 
 {% block titulo %}
-Editar Pefil
+{% if request.resolver_match.url_name == 'mudarsenha' %}
+Change Password | DevFlix
+{% else %}
+Profile Settings | DevFlix
+{% endif %}
 {% endblock %}
 
 {% block content %}
 
-    <header class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat"  style="background-image: url('{% static 'images/background_netflix.jpg' %}');">
-        <div class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col">
-            <h2 class="text-2xl">{{ user.email }}</h2>
+<header class="relative min-h-screen flex justify-center items-center overflow-hidden">
+
+    <!-- Background -->
+    <img
+        src="{% static 'images/background_netflix.jpg' %}"
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover"
+    >
+
+    <!-- Dark overlay -->
+    <div
+        class="absolute inset-0"
+        style="background: rgba(0, 0, 0, 0.68);">
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 w-full max-w-lg px-6 py-28">
+
+        <div
+            class="rounded-xl shadow-2xl p-8"
+            style="background: rgba(0, 0, 0, 0.84);"
+        >
+
+            <div class="text-center mb-7">
+
+                <h1 class="text-red-600 text-3xl font-bold tracking-wide mb-2">
+                    DEVFLIX
+                </h1>
+
+                {% if request.resolver_match.url_name == 'mudarsenha' %}
+
+                    <h2 class="text-2xl font-semibold text-white">
+                        Change Password
+                    </h2>
+
+                    <p class="text-gray-400 text-sm mt-2">
+                        Update the password associated with your DevFlix account.
+                    </p>
+
+                {% else %}
+
+                    <h2 class="text-2xl font-semibold text-white">
+                        Profile Settings
+                    </h2>
+
+                    <p class="text-gray-400 text-sm mt-2">
+                        Manage your account information.
+                    </p>
+
+                    <p class="text-gray-300 text-sm mt-3">
+                        {{ user.email }}
+                    </p>
+
+                {% endif %}
+
+            </div>
+
             <form method="post">
+
                 {% csrf_token %}
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Altere os campos abaixo para editar seu perfil</legend>
+
+                <div class="text-left text-gray-200">
                     {{ form|crispy }}
-                </fieldset>
-                <button class="bg-red-600 py-1 px-3 text-white md:text-lg rounded-md" type="submit">Editar Perfil</button>
+                </div>
+
+                {% if request.resolver_match.url_name == 'mudarsenha' %}
+
+                    <button
+                        class="w-full bg-red-600 hover:bg-red-700 transition py-3 mt-4 rounded-md font-semibold text-white"
+                        type="submit"
+                    >
+                        Update Password
+                    </button>
+
+                {% else %}
+
+                    <button
+                        class="w-full bg-red-600 hover:bg-red-700 transition py-3 mt-4 rounded-md font-semibold text-white"
+                        type="submit"
+                    >
+                        Save Changes
+                    </button>
+
+                {% endif %}
+
             </form>
-            <small><a href="{% url 'filme:mudarsenha' %}">Deseja alterar senha?</a></small>
+
+            {% if request.resolver_match.url_name == 'mudarsenha' %}
+
+                <div class="text-center mt-6">
+
+                    <a
+                        href="{% url 'filme:editarperfil' user.pk %}"
+                        class="text-gray-300 hover:text-white text-sm no-underline"
+                    >
+                        ← Back to Profile
+                    </a>
+
+                </div>
+
+            {% else %}
+
+                <div class="mt-6 border-t border-gray-800 pt-5">
+
+                    <a
+                        href="{% url 'filme:mudarsenha' %}"
+                        class="block w-full text-center border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white py-2 rounded-md text-sm no-underline transition"
+                    >
+                        Change Password
+                    </a>
+
+                </div>
+
+                <div class="text-center mt-5">
+
+                    <a
+                        href="{% url 'filme:homefilmes' %}"
+                        class="text-gray-400 hover:text-white text-sm no-underline"
+                    >
+                        ← Back to Browse
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+            <div class="text-center mt-7 border-t border-gray-800 pt-5">
+
+                <p class="text-xs text-gray-500">
+                    Built with Python & Django • Portfolio Project
+                </p>
+
+            </div>
+
         </div>
-    </header>
 
-    <footer class=" px-5 py-10 ">
-        <ul class="flex justify-between items-center">
+    </div>
 
-            <li>&copy; 2022</li>
-            <li> Feito com Python (Django)</li>
-            <li>Hashtag</li>
-        </ul>
-    </footer>
+</header>
 
 {% endblock %}

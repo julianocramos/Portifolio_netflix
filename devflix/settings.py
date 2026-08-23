@@ -176,6 +176,7 @@ LOGIN_REDIRECT_URL = "filme:homefilmes"
 
 LOGIN_URL = "filme:login"
 
+LOGOUT_REDIRECT_URL = "filme:homepage"
 
 # Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
