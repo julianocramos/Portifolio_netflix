@@ -21,6 +21,32 @@ DevFlix | Demo
         border-color: #e50914;
         box-shadow: 0 0 0 1px #e50914;
     }
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-wrapper input {
+        padding-right: 85px;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #d1d5db;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 4px;
+    }
+
+    .password-toggle:hover {
+        color: white;
+    }
 </style>
 {% endblock %}
 
@@ -68,9 +94,11 @@ DevFlix | Demo
 
             {% if form.non_field_errors %}
             <div class="bg-red-900 border border-red-600 text-red-200 rounded-md p-3 mb-4 text-sm">
+
                 {% for error in form.non_field_errors %}
                     {{ error }}
                 {% endfor %}
+
             </div>
             {% endif %}
 
@@ -78,7 +106,9 @@ DevFlix | Demo
 
                 {% csrf_token %}
 
+                <!-- Username -->
                 <div class="mb-4 login-input">
+
                     <label
                         for="id_username"
                         class="block text-sm text-gray-300 mb-2">
@@ -86,18 +116,37 @@ DevFlix | Demo
                     </label>
 
                     {{ form.username }}
+
                 </div>
 
+                <!-- Password -->
                 <div class="mb-5 login-input">
+
                     <label
                         for="id_password"
                         class="block text-sm text-gray-300 mb-2">
                         Password
                     </label>
 
-                    {{ form.password }}
+                    <div class="password-wrapper">
+
+                        {{ form.password }}
+
+                        <button
+                            type="button"
+                            id="passwordToggle"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                            aria-label="Show password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
                 </div>
 
+                <!-- Sign In -->
                 <button
                     class="w-full bg-red-600 hover:bg-red-700 transition py-3 rounded-md font-semibold text-white"
                     type="submit">
@@ -106,6 +155,7 @@ DevFlix | Demo
 
             </form>
 
+            <!-- Divider -->
             <div class="flex items-center gap-3 my-6">
 
                 <div class="h-px bg-gray-700 flex-grow"></div>
@@ -118,6 +168,7 @@ DevFlix | Demo
 
             </div>
 
+            <!-- Demo account -->
             <div class="bg-gray-900 border border-gray-700 rounded-lg p-4">
 
                 <p class="text-sm text-gray-300 mb-3 text-center">
@@ -127,14 +178,20 @@ DevFlix | Demo
                 <div class="text-sm space-y-1 mb-4">
 
                     <p>
-                        <span class="text-gray-500">Username:</span>
+                        <span class="text-gray-500">
+                            Username:
+                        </span>
+
                         <span class="text-white font-medium">
                             demo@devflix.app
                         </span>
                     </p>
 
                     <p>
-                        <span class="text-gray-500">Password:</span>
+                        <span class="text-gray-500">
+                            Password:
+                        </span>
+
                         <span class="text-white font-medium">
                             DevFlixDemo2026!
                         </span>
@@ -151,6 +208,7 @@ DevFlix | Demo
 
             </div>
 
+            <!-- Create account -->
             <div class="text-center mt-6">
 
                 <p class="text-gray-500 text-sm mb-1">
@@ -165,6 +223,7 @@ DevFlix | Demo
 
             </div>
 
+            <!-- Footer -->
             <div class="text-center mt-8 border-t border-gray-800 pt-5">
 
                 <p class="text-xs text-gray-500">
@@ -183,6 +242,21 @@ DevFlix | Demo
     function useDemoAccount() {
         document.getElementById('id_username').value = 'demo@devflix.app';
         document.getElementById('id_password').value = 'DevFlixDemo2026!';
+    }
+
+    function togglePassword() {
+        const passwordInput = document.getElementById('id_password');
+        const toggleButton = document.getElementById('passwordToggle');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.textContent = 'Hide';
+            toggleButton.setAttribute('aria-label', 'Hide password');
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.textContent = 'Show';
+            toggleButton.setAttribute('aria-label', 'Show password');
+        }
     }
 </script>
 
